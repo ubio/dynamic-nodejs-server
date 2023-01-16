@@ -11,6 +11,7 @@ RUN npm install
 FROM node:18.13.0-alpine
 ENV NODE_ENV production
 ENV NODE_NO_WARNINGS 1
+ENV NODE_PATH /tmp/node_modules
 
 WORKDIR /app
 RUN chown node:node /app

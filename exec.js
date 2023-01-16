@@ -19,13 +19,13 @@ function hash(script) {
 }
 
 function exists(hash) {
-    const scriptPath = `./scripts/${hash}.js`;
+    const scriptPath = `/tmp/scripts/${hash}.js`;
     return fs.existsSync(scriptPath);
 }
 
 async function save(script) {
     const scriptHash = hash(script);
-    const scriptPath = `./scripts/${scriptHash}.js`;
+    const scriptPath = `/tmp/scripts/${scriptHash}.js`;
     if (!fs.existsSync(scriptPath)) {
         console.log('saving', script);
         fs.writeFileSync(scriptPath, script);
@@ -56,14 +56,14 @@ async function install(scriptPath) {
     // check to see which dependencies are already installed
     const missingDeps = [];
     deps.forEach(dep => {
-        const exists = fs.existsSync('./node_modules/' + dep);
+        const exists = fs.existsSync('/tmp/node_modules/' + dep);
         if (!exists) {
             missingDeps.push(dep);
         }
     });
 
     for (dep of missingDeps) {
-        child_process.execSync('npm install ' + dep, {stdio: [0, 1, 2]});
+        child_process.execSync('cd /tmp && npm install ' + dep, {stdio: [0, 1, 2]});
     }
 }
 
