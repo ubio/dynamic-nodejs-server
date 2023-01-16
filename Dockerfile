@@ -20,4 +20,5 @@ COPY . .
 COPY --from=builder /builder/ ./out
 RUN npm ci
 
+EXPOSE 3000
 CMD ["node", "server.js"]
