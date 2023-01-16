@@ -5,8 +5,12 @@
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "moment": "^2.29.4",
+    "node-fetch": "^3.3.0",
     "npm": "^9.3.0",
     "pdf2json": "^3.0.2",
+    "pdfjs": "^2.4.7",
+    "pdfjs-dist": "^3.2.146",
+    "request": "^2.88.2",
     "underscore": "^1.13.6"
   },
   "scripts": {

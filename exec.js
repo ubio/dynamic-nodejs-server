@@ -10,7 +10,7 @@ async function exec(script, args) {
     if (!exists(scriptHash)) {
         await save(script);
     }
-    const code = '(function run () {' + Object.keys(args).map(key => `${key} = ${JSON.stringify(args[key])};`).join(';') + script + '})();';
+    const code = '(async function run () {' + Object.keys(args).map(key => `${key} = ${JSON.stringify(args[key])};`).join(';') + script + '})();';
     return eval(code);
 }
 

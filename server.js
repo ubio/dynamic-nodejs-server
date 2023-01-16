@@ -10,8 +10,12 @@ const { exec } = require('./exec');
 app.post('/exec', async function (req, res) {
     const script = req.body.script;
     const args = req.body.args;
-    const result = await exec(script, args);
-    res.send(JSON.stringify(result));
+    try {
+        const result = await exec(script, args);
+        res.send(JSON.stringify(result));
+    } catch (err) {
+        res.send(err, 500);
+    }
 });
 
 app.listen(port, () => {

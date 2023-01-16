@@ -1,1 +1,0 @@
-const _ = require('underscore'); const sum = _.reduce(nums, function(memo, num){ return memo + num; }, 0); return sum ;
