@@ -15,6 +15,7 @@ ENV NODE_PATH /tmp/node_modules
 
 WORKDIR /app
 RUN chown node:node /app
+RUN chown -R node:node /tmp
 USER node
 
 COPY . .
