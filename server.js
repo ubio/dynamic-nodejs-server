@@ -7,6 +7,10 @@ app.use(cors());
 app.use(bodyParser.json({ limit: 10_000_000 }));
 const { exec } = require('./exec');
 
+app.get('/', function (req, res) {
+    res.send('ok');
+});
+
 app.post('/exec', async function (req, res) {
     const script = req.body.script;
     const args = req.body.args;
@@ -19,5 +23,5 @@ app.post('/exec', async function (req, res) {
 });
 
 app.listen(port, () => {
-    
+    console.log('Listening on ' + port);
 });
