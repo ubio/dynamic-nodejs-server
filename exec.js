@@ -5,10 +5,12 @@ const { assert } = require('console');
 
 module.exports = { exec };
 
+const scriptHashes = [];
+
 async function exec(script, args) {
     const scriptHash = hash(script);
     if (!exists(scriptHash)) {
-        await save(script);
+        await install(script);
     }
     const code = '(async function run () {' + Object.keys(args).map(key => `${key} = ${JSON.stringify(args[key])};`).join(';') + script + '})();';
     return eval(code);
@@ -19,22 +21,10 @@ function hash(script) {
 }
 
 function exists(hash) {
-    const scriptPath = `/tmp/scripts/${hash}.js`;
-    return fs.existsSync(scriptPath);
+    return scriptHashes.indexOf(hash);
 }
 
-async function save(script) {
-    const scriptHash = hash(script);
-    const scriptPath = `/tmp/scripts/${scriptHash}.js`;
-    if (!fs.existsSync(scriptPath)) {
-        console.log('saving', script);
-        fs.writeFileSync(scriptPath, script);
-        await install(scriptPath);
-    }
-}
-
-async function install(scriptPath) {
-    const script = fs.readFileSync(scriptPath).toString();
+async function install(script) {
     const deps = [];
 
     // extract the import dependecies from the script
@@ -56,14 +46,14 @@ async function install(scriptPath) {
     // check to see which dependencies are already installed
     const missingDeps = [];
     deps.forEach(dep => {
-        const exists = fs.existsSync('/tmp/node_modules/' + dep);
+        const exists = fs.existsSync('/mnt/node_modules/' + dep);
         if (!exists) {
             missingDeps.push(dep);
         }
     });
 
     for (dep of missingDeps) {
-        child_process.execSync('cd /tmp && npm install ' + dep, {stdio: [0, 1, 2]});
+        child_process.execSync('cd /mnt && npm install ' + dep, {stdio: [0, 1, 2]});
     }
 }
 
