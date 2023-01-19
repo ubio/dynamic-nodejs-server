@@ -6,6 +6,7 @@ const { assert } = require('console');
 module.exports = { exec };
 
 const scriptHashes = [];
+const NODE_MODULES_DIR = (process.env.NODE_MODULES_DIR || '/mnt');
 
 async function exec(script, args) {
     const scriptHash = hash(script);
@@ -21,7 +22,7 @@ function hash(script) {
 }
 
 function exists(hash) {
-    return scriptHashes.indexOf(hash);
+    return scriptHashes.indexOf(hash) !== -1;
 }
 
 async function install(script) {
@@ -46,14 +47,14 @@ async function install(script) {
     // check to see which dependencies are already installed
     const missingDeps = [];
     deps.forEach(dep => {
-        const exists = fs.existsSync('/mnt/node_modules/' + dep);
+        const exists = fs.existsSync(`${NODE_MODULES_DIR}/node_modules/${dep}`);
         if (!exists) {
             missingDeps.push(dep);
         }
     });
 
     for (dep of missingDeps) {
-        child_process.execSync('cd /mnt && npm install ' + dep, {stdio: [0, 1, 2]});
+        child_process.execSync(`cd ${NODE_MODULES_DIR} && npm install ${dep}`, {stdio: [0, 1, 2]});
     }
 }
 
