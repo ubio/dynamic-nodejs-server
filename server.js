@@ -18,7 +18,7 @@ app.post('/exec', async function (req, res) {
         const result = await exec(script, args);
         res.send(JSON.stringify(result));
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send({ error: err, stack: err.stack });
     }
 });
 
