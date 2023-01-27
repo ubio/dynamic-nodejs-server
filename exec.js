@@ -1,7 +1,6 @@
 const fs = require('fs');
 const child_process = require('child_process');
 const crypto = require('crypto');
-const { assert } = require('console');
 
 module.exports = { exec };
 
