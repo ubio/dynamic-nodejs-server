@@ -7,7 +7,8 @@
     "npm": "^9.3.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postversion": "git push origin $(git rev-parse --abbrev-ref HEAD) --tags"
   },
   "name": "dynamic-nodejs",
   "version": "1.0.0",
