@@ -1,0 +1,46 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    uses: ubio/github-actions/.github/workflows/ci-build.yaml@master
+    with:
+      name: EXPERIMENTAL Dynamic Node Server
+      image: gcr.io/automation-cloud-registry/experimental-dynamic-node-server
+      ref: ${{ github.ref }}
+      file: Dockerfile
+    secrets:
+      REGISTRY_SECRET: ${{ secrets.GCP_REGISTRY_ACCESS }}
+      SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+
+  deploy-staging:
+    needs: build
+    uses: ubio/github-actions/.github/workflows/cd-dispatch-deploy.yaml@master
+    with:
+      gh_user: ubio
+      gh_repo: infrastructure
+      image_name: ns-nodejs-server
+      env_name: staging
+      app_path: automation-cloud/ns-nodejs-server
+      auto_merge: true
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+  deploy-production:
+    needs: build
+    uses: ubio/github-actions/.github/workflows/cd-dispatch-deploy.yaml@master
+    with:
+      gh_user: ubio
+      gh_repo: infrastructure
+      image_name: ns-nodejs-server
+      env_name: production
+      app_path: automation-cloud/ns-nodejs-server
+      auto_merge: false
+      pr_assignees: ${{ github.actor }}
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
