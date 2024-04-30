@@ -1,6 +1,6 @@
 # Dynamic Node.js eval server
 
-This small application allows you to remotely execute Node.js code on a server. This is primarily intended to power the NodeScript Node.js Eval module. 
+This small application allows you to remotely execute Node.js code on a server. This was built to power the NodeScript Node.js Eval module. 
 
 The eval server automatically installs NPM dependencies on demand if they do not already exist in the `node_modules` folder. 
 
